@@ -11,7 +11,6 @@ public class WordController {
 
 	@RequestMapping(value = "/search")
 	public WordFindModel compareList(@RequestParam(value = "word", required = true) String word) {
-
 		WordFindModel model = new WordFindModel(word);
 		model.process();
 		return model;
