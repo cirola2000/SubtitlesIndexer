@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 import com.mongodb.DBObject;
 
+import status.mongodb.collections.LemmaDB;
 import status.mongodb.collections.WordDB;
 
-public class WordListModel {
+public class LemmaListModel {
 
 	int size;
 
@@ -17,11 +18,11 @@ public class WordListModel {
 	public void makeList(){
 		
 
-		for(DBObject o: new WordDB().getAll()){
-			words.add(o.get(WordDB.WORD).toString());
+		for(DBObject o: new LemmaDB().getAll()){
+			words.add(o.get(LemmaDB.LEMMA).toString());
 		}
 		
-		setSize(new WordDB().getAll().size());
+		setSize(new LemmaDB().getAll().size());
 		
 	}
 	public int getSize() {

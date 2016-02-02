@@ -1,5 +1,7 @@
 package status.mongodb.collections;
 
+import org.bson.types.ObjectId;
+
 import status.mongodb.MongoSuperClass;
 
 public class WordDB extends MongoSuperClass {
@@ -16,6 +18,13 @@ public class WordDB extends MongoSuperClass {
 		addKey(WORD);
 	}	
 	
+	public WordDB(ObjectId id) {
+		super(COLLECTION_NAME);
+		addMandatoryField(WORD);
+		addKey(WORD);
+		find(true, ID, id);
+	}	
+	
 	public WordDB(String word) {
 		super(COLLECTION_NAME);
 		addMandatoryField(WORD);
@@ -28,8 +37,8 @@ public class WordDB extends MongoSuperClass {
 		addField(WORD, word);
 	}
 	
-	public void getWord(){
-		getField(WORD);
+	public String getWord(){
+		return getField(WORD).toString();
 	}
 	
 	public void setLemmaID(String lemmaID){

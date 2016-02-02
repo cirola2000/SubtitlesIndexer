@@ -35,7 +35,7 @@ public class MongoSuperClass {
 
 	// defining mongodb _id
 	// @JsonIgnore
-	public String ID = "_id";
+	public static String ID = "_id";
 
 	// defining PrimaryKeys field
 	// @JsonIgnore
@@ -389,6 +389,28 @@ public class MongoSuperClass {
 
 	public void setID(Object id) {
 		addField(ID, id);
+	}
+	
+	public ArrayList<DBObject> getAll(){ 
+		DBCursor cursor  = getCollection().find();
+		
+		ArrayList<DBObject> list = new ArrayList<DBObject>();
+		while(cursor.hasNext()){
+			DBObject obj = cursor.next();
+			list.add(obj);
+		}
+		return list;
+	}
+	
+	public ArrayList<DBObject> getAll(BasicDBObject query){ 
+		DBCursor cursor  = getCollection().find(query);
+		
+		ArrayList<DBObject> list = new ArrayList<DBObject>();
+		while(cursor.hasNext()){
+			DBObject obj = cursor.next();
+			list.add(obj);
+		}
+		return list;
 	}
 
 }
