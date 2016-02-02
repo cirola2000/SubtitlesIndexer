@@ -21,37 +21,37 @@ public class MainController {
 
 	@RequestMapping(value = "/main")
 	public String vai() throws MissingPropertiesException, ObjectAlreadyExistsException, NoPKFoundException{
-		new IndexesCreator().createIndexes();
-		
-		// save to a file
-		String url = "http://10.40.0.3/coisas/Modern.Family.S02.Season.2.720p.5.1Ch.BluRay.ReEnc-DeeJayAhmed/Modern.Family.S02E01.720p.5.1Ch.BluRay.ReEnc-DeeJayAhmed.srt";
-		String fileName = "/tmp/";
-		
-		VideoDB video = new VideoDB();
-		video.setExternalID(FileUtils.getFileName(url));
-		video.update(true);
-
-		DownloadSubtitle d = new DownloadSubtitle();
-		d.Download(url, fileName);
-
-		SubtibtleParser parser = new SubtibtleParser();
-		parser.parse(fileName, FileUtils.getExtension(url));
-//		parser.printCaptions();
-
-		
-		VideoDB videoDB = new VideoDB();
-		videoDB.setFileName(FileUtils.getFileName(url));
-		videoDB.update(true);
-		
-		NLPProcessor processor = new StanfordNLP(videoDB.getID());
-		
-		try {
-			processor.processCaptions(parser.captions);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//		new IndexesCreator().createIndexes();
+//		
+//		// save to a file
+//		String url = "http://10.40.0.3/coisas/Modern.Family.S02.Season.2.720p.5.1Ch.BluRay.ReEnc-DeeJayAhmed/Modern.Family.S02E01.720p.5.1Ch.BluRay.ReEnc-DeeJayAhmed.srt";
+//		String fileName = "/tmp/";
+//		
+//		VideoDB video = new VideoDB();
+//		video.setExternalID(FileUtils.getFileName(url));
+//		video.update(true);
+//
+//		DownloadSubtitle d = new DownloadSubtitle();
+//		d.Download(url, fileName);
+//
+//		SubtibtleParser parser = new SubtibtleParser();
+//		parser.parse(fileName, FileUtils.getExtension(url));
+////		parser.printCaptions();
+//
+//		
+//		VideoDB videoDB = new VideoDB();
+//		videoDB.setFileName(FileUtils.getFileName(url));
+//		videoDB.update(true);
+//		
+//		NLPProcessor processor = new StanfordNLP(videoDB.getID());
+//		
+//		try {
+//			processor.processCaptions(parser.captions);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
 		return "lol";
 	}
 	
