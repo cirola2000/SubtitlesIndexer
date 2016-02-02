@@ -8,6 +8,8 @@ public class WordDB extends MongoSuperClass {
 	
 	public static String WORD = "word";
 
+	public static String LEMMA_ID = "lemmaID";
+
 	public WordDB() {
 		super(COLLECTION_NAME);
 		addMandatoryField(WORD);
@@ -28,6 +30,14 @@ public class WordDB extends MongoSuperClass {
 	
 	public void getWord(){
 		getField(WORD);
+	}
+	
+	public void setLemmaID(String lemmaID){
+		addField(LEMMA_ID, lemmaID);
+	}
+	
+	public String getLemmaID(){
+		return getField(LEMMA_ID).toString();
 	}
 	
 

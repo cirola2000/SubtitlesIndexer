@@ -12,23 +12,20 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
-import status.mongodb.collections.WordDB;
-import status.mongodb.exceptions.LODVaderMissingPropertiesException;
-import status.mongodb.exceptions.LODVaderNoPKFoundException;
-import status.mongodb.exceptions.LODVaderObjectAlreadyExistsException;
+import status.subtitles.nlp.NLPProcessor;
+import status.subtitles.nlp.NLPWord;
 
 public class StanfordNLP extends NLPProcessor {
 
 	StanfordCoreNLP pipeline = null;
- 
+
 	public StanfordNLP(String videoID) {
-		super(videoID); 
+		super(videoID);
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, pos, lemma");
 		pipeline = new StanfordCoreNLP(props, false);
-		
-	}
 
+	}
 
 	@Override
 	protected List<String> parseSentences(String text) {
@@ -38,24 +35,27 @@ public class StanfordNLP extends NLPProcessor {
 		for (CoreMap sentence : document.get(SentencesAnnotation.class)) {
 			sentences.add(sentence.toString());
 		}
-		
+
 		return sentences;
 	}
 
 	@Override
-	protected List<String> parseWords(String sentece) {
+	protected List<NLPWord> parseWords(String sentece) {
 
 		Annotation document = pipeline.process(sentece);
-		List<String> words = new ArrayList<String>();
-		
+		List<NLPWord> words = new ArrayList<NLPWord>();
+
 		for (CoreMap sentence2 : document.get(SentencesAnnotation.class)) {
 
 			for (CoreLabel token : sentence2.get(TokensAnnotation.class)) {
+
+				NLPWord nlpWord = new NLPWord();
+				nlpWord.setWord(token.word());
+				nlpWord.setLemma(token.get(LemmaAnnotation.class));
+				nlpWord.setPos(token.get(PartOfSpeechAnnotation.class));
+
+				words.add(nlpWord);
 				
-				String word = token.word();				
-				words.add(word);
-//				String lemma = token.get(LemmaAnnotation.class);
-//				String pos = token.get(PartOfSpeechAnnotation.class);
 			}
 		}
 		return words;

@@ -3,6 +3,8 @@ package status.mongodb;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import status.mongodb.collections.LemmaDB;
+import status.mongodb.collections.POSDB;
 import status.mongodb.collections.SentenceDB;
 import status.mongodb.collections.VideoDB;
 import status.mongodb.collections.WordDB;
@@ -15,10 +17,16 @@ public class IndexesCreator {
 		addIndex(WordDB.COLLECTION_NAME, WordDB.WORD, 1);
 
 		addIndex(SentenceDB.COLLECTION_NAME, SentenceDB.SENTENCE, 1);
-		addIndex(VideoDB.COLLECTION_NAME, VideoDB.FILE_NAME, 1);
+		
+		addIndex(VideoDB.COLLECTION_NAME, VideoDB.VIDEO_EXTERNAL_ID, 1);
+		
 		addIndex(WordSentenceRelationDB.COLLECTION_NAME, WordSentenceRelationDB.SENTENCE_ID, 1);
 		addIndex(WordSentenceRelationDB.COLLECTION_NAME, WordSentenceRelationDB.WORD_ID, 1);
+		addIndex(WordSentenceRelationDB.COLLECTION_NAME, WordSentenceRelationDB.POS_ID, 1);
 
+		addIndex(LemmaDB.COLLECTION_NAME, LemmaDB.LEMMA, 1);
+		
+		addIndex(POSDB.COLLECTION_NAME, POSDB.POS, 1);
 		
 	}
 	

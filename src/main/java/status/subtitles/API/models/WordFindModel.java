@@ -74,7 +74,7 @@ public class WordFindModel {
 			CaptionDB caption = new CaptionDB(sentence.getCaptionID());			
 			sc.setCaptionStart(caption.getStart());
 			sc.setCaptionEnd(caption.getEnd());
-			sc.setVideoID(caption.getVideoID()); 
+			sc.setVideoID(caption.getSubtitleID()); 
 			
 			resources.add(sc);
 		}

@@ -16,9 +16,9 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-import status.mongodb.exceptions.LODVaderMissingPropertiesException;
-import status.mongodb.exceptions.LODVaderNoPKFoundException;
-import status.mongodb.exceptions.LODVaderObjectAlreadyExistsException;
+import status.mongodb.exceptions.MissingPropertiesException;
+import status.mongodb.exceptions.NoPKFoundException;
+import status.mongodb.exceptions.ObjectAlreadyExistsException;
 import status.properties.PropertiesFile;
 
 public class MongoSuperClass {
@@ -30,15 +30,15 @@ public class MongoSuperClass {
 	private static DB db;
 
 	// defining collection name
-//	@JsonIgnore
+	// @JsonIgnore
 	public String COLLECTION_NAME = null;
 
-	// defining mongodb _id 
-//	@JsonIgnore
+	// defining mongodb _id
+	// @JsonIgnore
 	public String ID = "_id";
 
 	// defining PrimaryKeys field
-//	@JsonIgnore
+	// @JsonIgnore
 	public ArrayList<Object> keys = new ArrayList<Object>();
 
 	// mongodb collection object
@@ -70,7 +70,7 @@ public class MongoSuperClass {
 	protected void addField(String key, String val) {
 		mongoDBObject.put(key, val);
 	}
-	
+
 	// add pair key/value to the persistence object
 	protected void addField(String key, Object val) {
 		mongoDBObject.put(key, val);
@@ -116,14 +116,13 @@ public class MongoSuperClass {
 	public static DB getDBInstance() {
 		try {
 			if (mongo == null) {
-				if (PropertiesFile.MONGODB_DB == null) 
+				if (PropertiesFile.MONGODB_DB == null)
 					new PropertiesFile().loadProperties();
 				if (PropertiesFile.MONGODB_SECURE_MODE) {
 					MongoCredential credential = MongoCredential.createMongoCRCredential(
 							PropertiesFile.MONGODB_USERNAME, PropertiesFile.MONGODB_DB,
 							PropertiesFile.MONGODB_PASSWORD.toCharArray());
-					mongo = new MongoClient(new ServerAddress(PropertiesFile.MONGODB_HOST),
-							Arrays.asList(credential));
+					mongo = new MongoClient(new ServerAddress(PropertiesFile.MONGODB_HOST), Arrays.asList(credential));
 				} else {
 					mongo = new MongoClient(PropertiesFile.MONGODB_HOST, PropertiesFile.MONGODB_PORT);
 				}
@@ -140,15 +139,14 @@ public class MongoSuperClass {
 	 * 
 	 * @param checkBeforeInsert
 	 *            query database and only insert if object is not there.
-	 * @throws LODVaderObjectAlreadyExistsException
-	 * @throws LODVaderNoPKFoundException
+	 * @throws ObjectAlreadyExistsException
+	 * @throws NoPKFoundException
 	 */
-	public void insert(boolean checkBeforeInsert)
-			throws LODVaderObjectAlreadyExistsException, LODVaderNoPKFoundException {
+	public void insert(boolean checkBeforeInsert) throws ObjectAlreadyExistsException, NoPKFoundException {
 
 		if (checkBeforeInsert)
 			if (find(false))
-				throw new LODVaderObjectAlreadyExistsException(
+				throw new ObjectAlreadyExistsException(
 						"Can't save object with PK: " + getKeys() + ". Object already exists.");
 
 		// saving object to mongodb
@@ -228,7 +226,7 @@ public class MongoSuperClass {
 			DBCursor cursor = getCollection().find(new BasicDBObject(key, value));
 
 			if (cursor.size() > 0) {
-//				mongoDBObject = cursor.next();
+				// mongoDBObject = cursor.next();
 				getCollection().update(new BasicDBObject(key, value), mongoDBObject);
 			} else {
 				if (create) {
@@ -236,7 +234,7 @@ public class MongoSuperClass {
 				}
 			}
 
-		} catch (LODVaderMissingPropertiesException e) {
+		} catch (MissingPropertiesException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -249,19 +247,19 @@ public class MongoSuperClass {
 	 * @param create
 	 *            set whether the object should be created case doesn't exist.
 	 * @return true case successfully updated
-	 * @throws LODVaderMissingPropertiesException
-	 * @throws LODVaderNoPKFoundException
-	 * @throws LODVaderObjectAlreadyExistsException
+	 * @throws MissingPropertiesException
+	 * @throws NoPKFoundException
+	 * @throws ObjectAlreadyExistsException
 	 */
-	public boolean update(boolean create) throws LODVaderMissingPropertiesException,
-			LODVaderObjectAlreadyExistsException, LODVaderNoPKFoundException {
+	public boolean update(boolean create)
+			throws MissingPropertiesException, ObjectAlreadyExistsException, NoPKFoundException {
 
 		if (create)
 			if (!find(false)) {
 				insert(false);
 				return true;
 			}
- 
+
 		checkMandatoryFields();
 		BasicDBList list = new BasicDBList();
 
@@ -285,8 +283,8 @@ public class MongoSuperClass {
 		return true;
 	}
 
-	public boolean updateBasedOnKeys(boolean create) throws LODVaderMissingPropertiesException,
-			LODVaderObjectAlreadyExistsException, LODVaderNoPKFoundException {
+	public boolean updateBasedOnKeys(boolean create)
+			throws MissingPropertiesException, ObjectAlreadyExistsException, NoPKFoundException {
 
 		checkMandatoryFields();
 
@@ -319,9 +317,9 @@ public class MongoSuperClass {
 	 * Remove an object
 	 * 
 	 * @return true case successfully removed
-	 * @throws LODVaderMissingPropertiesException
+	 * @throws MissingPropertiesException
 	 */
-	public boolean remove() throws LODVaderMissingPropertiesException {
+	public boolean remove() throws MissingPropertiesException {
 		checkMandatoryFields();
 		DBCursor d = collection.find(mongoDBObject);
 		if (d.hasNext()) {
@@ -330,23 +328,23 @@ public class MongoSuperClass {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * MongoDB bulk save 
+	 * MongoDB bulk save
+	 * 
 	 * @return
 	 */
-	
-	protected boolean bulkSave2(List<DBObject> objects){
-        BulkWriteOperation builder = getCollection().initializeUnorderedBulkOperation();
-        for(DBObject doc :objects)
-        {
-            builder.insert(doc);
-        }
-        BulkWriteResult result = builder.execute();
-        return result.isAcknowledged();
+
+	protected boolean bulkSave2(List<DBObject> objects) {
+		BulkWriteOperation builder = getCollection().initializeUnorderedBulkOperation();
+		for (DBObject doc : objects) {
+			builder.insert(doc);
+		}
+		BulkWriteResult result = builder.execute();
+		return result.isAcknowledged();
 	}
 
-//	@JsonIgnore
+	// @JsonIgnore
 	protected DBCollection getCollection() {
 		if (collection == null) {
 			collection = getDBInstance().getCollection(COLLECTION_NAME);
@@ -361,7 +359,7 @@ public class MongoSuperClass {
 		return null;
 	}
 
-//	@JsonIgnore
+	// @JsonIgnore
 	public ArrayList<Object> getKeys() {
 		return keys;
 	}
@@ -370,25 +368,27 @@ public class MongoSuperClass {
 		keys.add(key);
 	}
 
-	private void checkMandatoryFields() throws LODVaderMissingPropertiesException {
+	private void checkMandatoryFields() throws MissingPropertiesException {
 		for (String field : mandatoryFields) {
 			checkField(field);
-		} 
+		}
 	}
 
-	private boolean checkField(String key) throws LODVaderMissingPropertiesException {
+	private boolean checkField(String key) throws MissingPropertiesException {
 		if (mongoDBObject.get(key) == null)
-			throw new LODVaderMissingPropertiesException("Missing filed: " + key.toString());
+			throw new MissingPropertiesException("Missing filed: " + key.toString());
 		return true;
 	}
 
 	public String getID() {
-		return getField(ID).toString();
+		if (getField(ID) != null)
+			return getField(ID).toString();
+		else
+			return null;
 	}
-	
+
 	public void setID(Object id) {
 		addField(ID, id);
 	}
-	
 
 }

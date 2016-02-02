@@ -21,7 +21,7 @@ public class CaptionDB extends MongoSuperClass {
 
 	public static String END = "end";
 
-	public static String VIDEO_ID = "videoID";
+	public static String SUBTITLE_ID = "subtitleID";
 
 	public void setStart(String start) {
 		addField(START, start);
@@ -31,8 +31,8 @@ public class CaptionDB extends MongoSuperClass {
 		addField(END, end);
 	}
 
-	public void setVideoID(String videoID) {
-		addField(VIDEO_ID, videoID);
+	public void setSubtitleID(String subtitleID) {
+		addField(SUBTITLE_ID, subtitleID);
 	}
 
 	public String getStart() {
@@ -43,8 +43,8 @@ public class CaptionDB extends MongoSuperClass {
 		return getField(END).toString();
 	}
 
-	public String getVideoID() {
-		return getField(VIDEO_ID).toString();
+	public String getSubtitleID() {
+		return getField(SUBTITLE_ID).toString();
 	}
 
 }

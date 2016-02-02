@@ -10,7 +10,14 @@ import status.subtitles.API.models.WordFindModel;
 public class WordController {
 
 	@RequestMapping(value = "/search")
-	public WordFindModel compareList(@RequestParam(value = "word", required = true) String word) {
+	public WordFindModel search(@RequestParam(value = "word", required = true) String word) {
+		WordFindModel model = new WordFindModel(word);
+		model.process();
+		return model;
+	}
+	
+	@RequestMapping(value = "/list")
+	public WordFindModel list(@RequestParam(value = "word", required = true) String word) {
 		WordFindModel model = new WordFindModel(word);
 		model.process();
 		return model;

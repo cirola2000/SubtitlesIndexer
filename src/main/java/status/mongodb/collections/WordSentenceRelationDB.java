@@ -11,7 +11,9 @@ public class WordSentenceRelationDB extends MongoSuperClass {
 	}
 
 	public static String WORD_ID = "wordID";
-	
+
+	public static String POS_ID = "posID";
+
 	public static String SENTENCE_ID = "sentenceID";
 
 	public String getWordID() {
@@ -28,6 +30,14 @@ public class WordSentenceRelationDB extends MongoSuperClass {
 
 	public void setSentenceID(String sentenceID) {
 		addField(SENTENCE_ID, sentenceID);
+	}
+	
+	public void setPOSID(String posID) {
+		addField(POS_ID, posID);
+	}
+
+	public String getPOSID(String posID) {
+		return getField(POS_ID).toString();
 	}
 	
 
