@@ -1,0 +1,26 @@
+<body>
+
+    <video id="Video1" style="height: 360px">
+        <source src="http://statussistemas.cloudapp.net:8090/Modern.Family.S04E24.720p.5.1Ch.BluRay.ReEnc-DeeJayAhmed.mp4" type="video/mp4" />
+    </video>
+
+    <div id='tempo'></div>
+
+    <script type="text/javascript">
+        var video = document.getElementById("Video1");
+       var divtempo = document.getElementById("tempo");
+	   
+       var start = 150;
+       var duration = 5;
+       
+	   video.currentTime =start;
+	   video.play();
+	   
+       setInterval(function(){
+           divtempo.innerHTML = "tempo (s): " + video.currentTime;
+           if(video.currentTime >= start+duration)
+            video.src='';
+       },1000);
+       
+    </script>
+</body>
